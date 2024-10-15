@@ -12,13 +12,17 @@ import (
 // Rust implementation: https://docs.rs/pdqsort/latest/pdqsort/
 // limit is the number of allowed bad (very unbalanced) pivots before falling back to heapsort.
 
-// Deduplicate 去重
+// Deduplicate 去重数组元素去重
+// 注意：数组元素类型必须实现了comparable接口
 func Deduplicate[T comparable](paramList []T) []T {
 	set := NewSetBySlice(paramList)
 	return set.All()
 }
 
 // IsEqualArray 判断两个数组是否相等
+// 要求数组元素顺序完全一样
+// 注意：数组元素类型必须实现了comparable接口
+
 func IsEqualArray[T comparable](paramArray1, paramArray2 []T) bool {
 	if len(paramArray1) != len(paramArray2) {
 		return false
