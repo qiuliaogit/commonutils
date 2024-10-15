@@ -18,6 +18,7 @@ func RandomString(paramLen int) string {
 	}
 	lenChar := len(randomStringChars)
 	build := &strings.Builder{}
+	build.Grow(paramLen)
 	for i := 0; i < paramLen; i++ {
 		idx := RandomIntScope(0, lenChar-1)
 		build.WriteString(randomStringChars[idx])
