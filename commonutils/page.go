@@ -18,6 +18,19 @@ func NewPage[T Integer](paramPage T, paramPageSize T) *PageInfo {
 	return p.RoundPageInfo()
 }
 
+// NewPageRoundSize 创建新的Page对象, 并围绕页大小 使其在合理值的范围内(指定缺省页值和最大值)
+//   - paramPage 页码 (从1开始)
+//   - paramPageSize 页大小 (每页记录数)
+//   - paramDefaultSize 缺省页大小 (当paramPageSize <= 0时, 页大小取缺省值)
+//   - paramMaxSize 最大页大小 (当paramPageSize > paramMaxSize时, 页大小取最大值)
+func NewPageRoundSize[T Integer](paramPage T, paramPageSize T, paramDefaultSize T, paramMaxSize T) *PageInfo {
+	p := PageInfo{
+		Page:     int(paramPage),
+		PageSize: int(paramPageSize),
+	}
+	return p.RoundPageInfoEx(int(paramDefaultSize), int(paramMaxSize))
+}
+
 // RoundPageInfo 围绕页信息 使它在合理值的范围内
 func (p *PageInfo) RoundPageInfo() *PageInfo {
 	return p.RoundPageInfoEx(10, 1000)
