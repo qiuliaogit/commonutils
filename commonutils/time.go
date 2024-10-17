@@ -228,7 +228,6 @@ func IsSameDayFromTimestampSecond(paramT1 int64, paramT2 int64) bool {
 //   - return time.Time
 func TimestampSecond2Time(paramTimestamp int64) time.Time {
 	return time.Unix(paramTimestamp, 0)
-
 }
 
 // TimestampMillis2Time 时间戳转为time.Time 时间戳单位毫秒
