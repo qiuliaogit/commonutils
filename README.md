@@ -18,3 +18,5 @@ go get github.com/qiuliaogit/commonutils
 - md5.go md5相关工具函数
 - utils.go 其他工具函数
 - version.go 版本信息
+- datenum.go 一个数字日期的工具函数
+- tdatetime.go 一个时间日期TDateTime的类
