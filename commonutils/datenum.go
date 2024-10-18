@@ -44,3 +44,8 @@ func NextDateNum(dateNum int) (int, error) {
 func GetNowDateNum() int {
 	return FormatDateNum(time.Now())
 }
+
+// 取当前日期的北京时区日期号码
+func GetNowDateNumForBeijing() int {
+	return FormatDateNumForBeijing(time.Now())
+}
