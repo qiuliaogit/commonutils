@@ -11,8 +11,8 @@ func Test_DateNum(t *testing.T) {
 	dateNumUnix := FormatDateNum(tm)
 	dateNumBJ := FormatDateNumForBeijing(tm)
 
-	t.Log("==> unix", dateNumUnix)
-	t.Log("==> beijing", dateNumBJ)
+	t.Log("==> unix", dateNumUnix, "=>", DateNum2DateStr(dateNumUnix, "-"))
+	t.Log("==> beijing", dateNumBJ, "=>", DateNum2DateStr(20240101, "-"))
 
 	//  ArraySort<[]int>(lst)
 }

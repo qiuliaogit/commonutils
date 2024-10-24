@@ -1,6 +1,7 @@
 package commonutils
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -27,7 +28,7 @@ func ParseDateNum(dateNum int) (time.Time, error) {
 
 // 将日期号码转换为Time， 该日期的格式为YYYYMMDD的8位整数, 该日期的时区为北京时区
 func ParseDateNumForBeijing(dateNum int) (time.Time, error) {
-	return time.ParseInLocation("20060102", strconv.Itoa(dateNum), time.Local)
+	return time.ParseInLocation("20060102", strconv.Itoa(dateNum), beijingLoc)
 }
 
 // 取指定日期的后一天的日期号码 如：20210101 -> 20210102
@@ -40,6 +41,16 @@ func NextDateNum(dateNum int) (int, error) {
 	return FormatDateNum(nextDate), nil
 }
 
+// 取指定日期的后一天的日期号码 如：20210101 -> 20210102
+func NextDateNumForBeijing(dateNum int) (int, error) {
+	date, err := ParseDateNumForBeijing(dateNum)
+	if err != nil {
+		return 0, err
+	}
+	nextDate := date.AddDate(0, 0, 1)
+	return FormatDateNumForBeijing(nextDate), nil
+}
+
 // 取当前日期的日期号码
 func GetNowDateNum() int {
 	return FormatDateNum(time.Now())
@@ -48,4 +59,13 @@ func GetNowDateNum() int {
 // 取当前日期的北京时区日期号码
 func GetNowDateNumForBeijing() int {
 	return FormatDateNumForBeijing(time.Now())
+}
+
+// 日期号码转日期字符串 YYYY-MM-DD
+func DateNum2DateStr(dateNum int, splitChar string) string {
+	Day := dateNum % 100
+	dateNum /= 100
+	Month := dateNum % 100
+	Year := dateNum / 100
+	return fmt.Sprintf("%04d%s%02d%s%02d", Year, splitChar, Month, splitChar, Day)
 }
