@@ -62,6 +62,25 @@ func Test_Days(t *testing.T) {
 
 }
 
+func Test_DateTimeCalc(t *testing.T) {
+	dtNow := MakeBeijingDateTime()
+	lastTimestamp := dtNow.ToBeijingZeroTime().ToUTC().GetSecond()
+
+	beginTime7 := time.Unix(lastTimestamp-SECOND_BY_DAY*7, 0)
+	endTime := time.Unix(lastTimestamp-1, 0)
+
+	todayTime := time.Unix(lastTimestamp-SECOND_BY_DAY*0, 0)
+	yesterdayTime := time.Unix(lastTimestamp-SECOND_BY_DAY*1, 0)
+
+	// 今日日期字符串
+	strToday := BeijingDateString(todayTime)
+	// 昨天日期字符串
+	strYesterday := BeijingDateString(yesterdayTime)
+
+	t.Logf("今天是：%s, 昨天是：%s", strToday, strYesterday)
+	t.Logf("beginTime7:%s, endTime:%s", beginTime7.Format("2006-01-02 15:04:05"), endTime.Format("2006-01-02 15:04:05"))
+}
+
 func Test_Timestamp2Beijing(t *testing.T) {
 	destDateTime := "2024-08-30 18:18:18"
 	destDate := "2024-08-30"
@@ -121,5 +140,36 @@ func Test_Timestamp2Beijing(t *testing.T) {
 
 	if bjDateTime != destCompactDateTime {
 		t.Errorf("(%s)%d => Compact DateTime != %s", destDateTime, dtTimestamp, bjDateTime)
+	}
+}
+
+func Test_ParseDateTime(t *testing.T) {
+	srcDateTime := "2024-08-30 18:18:18"
+	srcDate := "2024-08-30"
+
+	dt, err := ParseDateTimeForBeijingTime(srcDateTime)
+	if err != nil {
+		t.Error(err)
+	}
+	destDateTime := dt.Format("2006-01-02 15:04:05")
+	if destDateTime != srcDateTime {
+		t.Errorf("(%s) => DateTime != %s", srcDateTime, destDateTime)
+	}
+
+	stDate, err := ParseDateForBeijingTime(srcDate)
+	if err != nil {
+		t.Error(err)
+	}
+	destDate := stDate.Format("2006-01-02")
+	if destDate != srcDate {
+		t.Errorf("(%s) => Date != %s", srcDate, destDate)
+	}
+
+	if !IsDateTimeFormat(srcDateTime) {
+		t.Errorf("(%s) => DateTime Format Error", srcDateTime)
+	}
+
+	if !IsDateFormat(srcDate) {
+		t.Errorf("(%s) => Date Format Error", srcDate)
 	}
 }

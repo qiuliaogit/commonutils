@@ -1,6 +1,7 @@
 package commonutils
 
 import (
+	"strconv"
 	"testing"
 )
 
@@ -76,6 +77,50 @@ func Test_RandOne(t *testing.T) {
 		}
 		if *val < 1 || *val > 10 {
 			t.Errorf("RandOneInArray(%v)  value=%d  failed", v, *val)
+		}
+	}
+}
+
+func Test_ParseInt(t *testing.T) {
+	v := []string{"10", "20", "-1", "2147483647", "-2147483648", "4294967296", "9223372036854775807", "-9223372036854775807", "2147483647", "-2147483648", "4294967296", "9223372036854775807", "-9223372036854775807"}
+	dest := []int64{10, 20, -1, 2147483647, -2147483648, 4294967296, 9223372036854775807, -9223372036854775807, 2147483647, -2147483648, 4294967296, 9223372036854775807, -9223372036854775807}
+	for i, val := range v {
+		value, err := Str2Int[int64](val)
+		if err != nil {
+			t.Errorf("Str2Int(%s) failed: %s", val, err.Error())
+		}
+		if value != dest[i] {
+			t.Errorf("Str2Int(%s)  value=%d  failed", val, value)
+		}
+	}
+}
+
+func Test_ParseUint(t *testing.T) {
+	v := []string{"10", "20", "4294967295", "2147483647", "2147483648", "4294967296", "9223372036854775807", "18446744073709551615", "2147483647", "2147483648", "4294967296", "9223372036854775807", "18446744073709551615", "2147483647", "2147483648", "4294967296", "9223372036854775807", "18446744073709551615"}
+	dest := []uint64{10, 20, 4294967295, 2147483647, 2147483648, 4294967296, 9223372036854775807, 18446744073709551615, 2147483647, 2147483648, 4294967296, 9223372036854775807, 18446744073709551615, 2147483647, 2147483648, 4294967296, 9223372036854775807, 18446744073709551615}
+	for i, val := range v {
+		value, err := Str2UInt[uint64](val)
+		if err != nil {
+			t.Errorf("Str2UInt(%s) failed: %s", val, err.Error())
+		}
+		if value != dest[i] {
+			t.Errorf("Str2UInt(%s)  value=%d  failed", val, value)
+		}
+	}
+}
+
+func Test_Float(t *testing.T) {
+	dest := []float64{1.23456789, 9.87654321, 123456789.012345678, 9007199254740992.0, -9007199254740992.0}
+	v := []string{"1.23456789", "9.87654321", "123456789.012345678", "9007199254740992.0", "-9007199254740992.0"}
+	for i, val := range v {
+		value, err := Str2Float(val)
+		if err != nil {
+			t.Errorf("Str2Float(%s) failed: %s", val, err.Error())
+		}
+		if value != dest[i] {
+			t.Errorf("Str2Float(%s)  value=%g  failed", val, value)
+		} else {
+			t.Logf("Str2Float(%s)  value=%s  passed", val, strconv.FormatFloat(value, 'f', -1, 64))
 		}
 	}
 }

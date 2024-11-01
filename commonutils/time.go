@@ -2,6 +2,7 @@ package commonutils
 
 //仅演示获取当天指定时间的时间戳
 import (
+	"regexp"
 	"time"
 )
 
@@ -36,10 +37,26 @@ const (
 	DT_TYPE_BEIJING = 8
 )
 
+var (
+	dateRegex     = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
+	dateTimeRegex = regexp.MustCompile(`^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$`)
+)
+
+// 时区定义参考： https://jp.cybozu.help/general/zh/admin/list_systemadmin/list_localization/timezone.html
 var beijingLoc *time.Location
 
 func init() {
 	beijingLoc, _ = time.LoadLocation("Asia/Shanghai")
+}
+
+// IsDateFormat 判断是否是日期格式 YYYY-MM-DD
+func IsDateFormat(paramDate string) bool {
+	return dateRegex.MatchString(paramDate)
+}
+
+// IsDateTimeFormat 判断是否是日期时间格式 YYYY-MM-DD hh:mm:ss
+func IsDateTimeFormat(paramDateTime string) bool {
+	return dateTimeRegex.MatchString(paramDateTime)
 }
 
 // GetNowMillis 取当前时间戳(毫秒)
@@ -55,9 +72,6 @@ func GetNowSecond() int64 {
 // ParseDateTimeForBeijingMillis 解析北京格式的日期时间 单位毫秒
 //   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
 func ParseDateTimeForBeijingMillis(paramDate string) (int64, error) {
-	//获取北京时区
-	//时区定义参考： https://jp.cybozu.help/general/zh/admin/list_systemadmin/list_localization/timezone.html
-	// loc, _ := time.LoadLocation("Asia/Shanghai")
 	startTime, err := time.ParseInLocation("2006-1-2 15:4:5", paramDate, beijingLoc)
 	if err != nil {
 		return 0, err
@@ -65,12 +79,21 @@ func ParseDateTimeForBeijingMillis(paramDate string) (int64, error) {
 	return startTime.UnixMilli(), nil
 }
 
+// ParseDateTimeForBeijingTime 解析北京格式的日期时间
+//   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
+func ParseDateTimeForBeijingTime(paramDate string) (time.Time, error) {
+	return time.ParseInLocation("2006-1-2 15:4:5", paramDate, beijingLoc)
+}
+
+// ParseDateForBeijingTime 解析北京格式的日期时间
+//   - paramDate 日期时间字符串 格式：2021-01-01
+func ParseDateForBeijingTime(paramDate string) (time.Time, error) {
+	return time.ParseInLocation("2006-1-2", paramDate, beijingLoc)
+}
+
 // ParseDateForBeijingMillis 解析北京格式的日期 单位毫秒
 //   - paramDate 日期字符串 格式：2021-01-01
 func ParseDateForBeijingMillis(paramDate string) (int64, error) {
-	//获取北京时区
-	//时区定义参考： https://jp.cybozu.help/general/zh/admin/list_systemadmin/list_localization/timezone.html
-	// loc, _ := time.LoadLocation("Asia/Shanghai")
 	startTime, err := time.ParseInLocation("2006-1-2", paramDate, beijingLoc)
 	if err != nil {
 		return 0, err
