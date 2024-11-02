@@ -53,6 +53,12 @@ func CalcMoneyByFloat(amount float64) string {
 	return CalcMoneyByCent(int64(math.Round(amount * 100)))
 }
 
+// 将单位为分转换为浮点的元，保留两位小数, 不足补0
+//   - 单位是分
+func CalcMoneyByFloat2(amount float64) string {
+	return CalcMoneyByCent2(int64(math.Round(amount * 100)))
+}
+
 // 将单位为分转换为浮点的元
 //   - 单位是分
 func CalcMoneyByCent(num int64) string {
@@ -85,6 +91,42 @@ func CalcMoneyByCent(num int64) string {
 		} else {
 			// 如果没有小数位，则显示整数
 			return fmt.Sprintf("-%d", cnt)
+		}
+	}
+}
+
+// 将单位为分转换为浮点的元, 保留两位小数, 不足补0
+//   - 单位是分
+func CalcMoneyByCent2(num int64) string {
+	// return fmt.Sprintf("%.2f", float64(num)/100)
+	isNegative := false
+	if num < 0 {
+		num = -num
+		isNegative = true
+	}
+	fen := num % 100
+	cnt := num / 100
+	if !isNegative {
+		if fen > 0 {
+			if fen%10 == 0 {
+				return fmt.Sprintf("%d.%d0", cnt, fen/10)
+			} else {
+				return fmt.Sprintf("%d.%02d", cnt, fen)
+			}
+		} else {
+			// 如果没有小数位，则显示整数
+			return fmt.Sprintf("%d.00", cnt)
+		}
+	} else {
+		if fen > 0 {
+			if fen%10 == 0 {
+				return fmt.Sprintf("-%d.%d0", cnt, fen/10)
+			} else {
+				return fmt.Sprintf("-%d.%02d", cnt, fen)
+			}
+		} else {
+			// 如果没有小数位，则显示整数
+			return fmt.Sprintf("-%d.00", cnt)
 		}
 	}
 }
