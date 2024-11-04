@@ -10,9 +10,17 @@ func Test_DateNum(t *testing.T) {
 	tm := time.Unix(int64(timestamp), 0)
 	dateNumUnix := FormatDateNum(tm)
 	dateNumBJ := FormatDateNumForBeijing(tm)
+	DestStr := "2024-10-18"
+	DestNum := 20241018
 
-	t.Log("==> unix", dateNumUnix, "=>", DateNum2DateStr(dateNumUnix, "-"))
-	t.Log("==> beijing", dateNumBJ, "=>", DateNum2DateStr(20240101, "-"))
+	if DateNum2DateStr(dateNumUnix, "-") != DestStr {
+		t.Errorf("DateNum2DateStr %s != %s", DateNum2DateStr(dateNumUnix, "-"), DestStr)
+	}
 
+	if dateNumBJ != DestNum {
+		t.Errorf("dateNumBJ %d != %d", dateNumBJ, DestNum)
+	}
+	// t.Log("==> unix", dateNumUnix, "=>", DateNum2DateStr(dateNumUnix, "-"))
+	// t.Log("==> beijing", dateNumBJ, "=>", DateNum2DateStr(20240101, "-"))
 	//  ArraySort<[]int>(lst)
 }

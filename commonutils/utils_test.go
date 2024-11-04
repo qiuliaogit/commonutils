@@ -12,7 +12,7 @@ func Test_CalcMoneyByCent2(t *testing.T) {
 		if result2 != dest[i] {
 			t.Errorf("CalcMoneyByCent2(%d) = %s, want %s", val, result2, dest[i])
 		} else {
-			t.Logf("CalcMoneyByCent2(%d) => %s", val, result2)
+			// t.Logf("CalcMoneyByCent2(%d) => %s", val, result2)
 		}
 		if result != dest1[i] {
 			t.Errorf("CalcMoneyByCent(%d) = %s, want %s", val, result, dest1[i])

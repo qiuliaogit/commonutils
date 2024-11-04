@@ -50,8 +50,8 @@ func Test_Days(t *testing.T) {
 		days2 = -days2
 	}
 
-	t.Logf("计算出来%s 和 %s 相差%d天", t1, t3, days)
-	t.Logf("计算出来%s 和 %s 相差%d天", t2, t3, days2)
+	// t.Logf("计算出来%s 和 %s 相差%d天", t1, t3, days)
+	// t.Logf("计算出来%s 和 %s 相差%d天", t2, t3, days2)
 
 	if days != 31 {
 		t.Errorf("计算出来%s 和 %s = %d 相差不是31天", t1, t3, days)
@@ -93,9 +93,9 @@ func Test_Timestamp2Beijing(t *testing.T) {
 	bjDate := Timestamp2BeijingDate(dtTimestamp)
 	bjTime := Timestamp2BeijingTime(dtTimestamp)
 	bjDateTime := Timestamp2BeijingDateTime(dtTimestamp)
-	t.Log(bjDate)
-	t.Log(bjTime)
-	t.Log(bjDateTime)
+	// t.Log(bjDate)
+	// t.Log(bjTime)
+	// t.Log(bjDateTime)
 	if bjDate != destDate {
 		t.Errorf("(%s)%d => Date != %s", destDateTime, dtTimestamp, bjDate)
 	}
@@ -112,9 +112,9 @@ func Test_Timestamp2Beijing(t *testing.T) {
 	bjDate = BeijingDateString(stTime)
 	bjTime = BeijingTimeString(stTime)
 	bjDateTime = BeijingDateTimeString(stTime)
-	t.Log(bjDate)
-	t.Log(bjTime)
-	t.Log(bjDateTime)
+	// t.Log(bjDate)
+	// t.Log(bjTime)
+	// t.Log(bjDateTime)
 	if bjDate != destDate {
 		t.Errorf("(%s)%d => Date != %s", destDateTime, dtTimestamp, bjDate)
 	}
@@ -128,9 +128,9 @@ func Test_Timestamp2Beijing(t *testing.T) {
 	bjDate = BeijingCompactDateString(stTime)
 	bjTime = BeijingCompactTimeString(stTime)
 	bjDateTime = BeijingCompactDateTimeString(stTime)
-	t.Log(bjDate)
-	t.Log(bjTime)
-	t.Log(bjDateTime)
+	// t.Log(bjDate)
+	// t.Log(bjTime)
+	// t.Log(bjDateTime)
 	if bjDate != destCompactDate {
 		t.Errorf("(%s)%d => Compact Date != %s", destDateTime, dtTimestamp, bjDate)
 	}

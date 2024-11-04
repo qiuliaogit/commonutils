@@ -1,7 +1,6 @@
 package commonutils
 
 import (
-	"strconv"
 	"testing"
 )
 
@@ -120,7 +119,19 @@ func Test_Float(t *testing.T) {
 		if value != dest[i] {
 			t.Errorf("Str2Float(%s)  value=%g  failed", val, value)
 		} else {
-			t.Logf("Str2Float(%s)  value=%s  passed", val, strconv.FormatFloat(value, 'f', -1, 64))
+			// t.Logf("Str2Float(%s)  value=%s  passed", val, strconv.FormatFloat(value, 'f', -1, 64))
 		}
+	}
+}
+
+func Test_ArrayJoin(t *testing.T) {
+	v := []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	u := []uint64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	dest := "1,2,3,4,5,6,7,8,9,10"
+	if IntArrayJoin(v, ",") != dest {
+		t.Errorf("ArrayJoin(%v)  value=%s  failed", v, IntArrayJoin(v, ","))
+	}
+	if UIntArrayJoin(u, ",") != dest {
+		t.Errorf("ArrayJoin(%v)  value=%s  failed", u, UIntArrayJoin(u, ","))
 	}
 }
