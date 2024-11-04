@@ -196,3 +196,8 @@ func Str2UInt[T UnsignedInteger](paramStr string) (T, error) {
 func Str2Float(paramStr string) (float64, error) {
 	return strconv.ParseFloat(paramStr, 64)
 }
+
+// Float2Str 浮点数转字符串
+func Float2Str[T ~float32 | ~float64](paramFloat T) string {
+	return strconv.FormatFloat(float64(paramFloat), 'f', -1, 64)
+}
