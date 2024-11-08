@@ -35,6 +35,8 @@ const (
 	DT_TYPE_UTC = 0
 	// DateTime类型 北京时间
 	DT_TYPE_BEIJING = 8
+	// 北京时区名称
+	ZONE_NAME_BEGIJING = "Asia/Shanghai"
 )
 
 var (
@@ -46,7 +48,12 @@ var (
 var beijingLoc *time.Location
 
 func init() {
-	beijingLoc, _ = time.LoadLocation("Asia/Shanghai")
+	beijingLoc, _ = time.LoadLocation(ZONE_NAME_BEGIJING)
+}
+
+// GetBeijingLocation 获取北京时区的Location
+func GetBeijingLocation() *time.Location {
+	return beijingLoc
 }
 
 // IsDateFormat 判断是否是日期格式 YYYY-MM-DD

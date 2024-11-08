@@ -41,6 +41,16 @@ func NextDateNum(dateNum int) (int, error) {
 	return FormatDateNum(nextDate), nil
 }
 
+// 取指定日期的后n天的日期号码 如：20210101 -> 20210102
+func NextNDaysDateNum(dateNum int, nDays int) (int, error) {
+	date, err := ParseDateNum(dateNum)
+	if err != nil {
+		return 0, err
+	}
+	nextDate := date.AddDate(0, 0, nDays)
+	return FormatDateNum(nextDate), nil
+}
+
 // 取指定日期的后一天的日期号码 如：20210101 -> 20210102
 func NextDateNumForBeijing(dateNum int) (int, error) {
 	date, err := ParseDateNumForBeijing(dateNum)
