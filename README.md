@@ -20,3 +20,8 @@ go get github.com/qiuliaogit/commonutils
 - version.go 版本信息
 - datenum.go 一个数字日期的工具函数
 - tdatetime.go 一个时间日期TDateTime的类
+
+## 更新日志
+### 1.0.9
+- 增加GormWhere类，用于简化Gorm的条件查询
+- 增加ParamDateTime类，用于处理日期参数

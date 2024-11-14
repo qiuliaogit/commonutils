@@ -173,3 +173,51 @@ func Test_ParseDateTime(t *testing.T) {
 		t.Errorf("(%s) => Date Format Error", srcDate)
 	}
 }
+
+func Test_ParamDateTime(t *testing.T) {
+	srcDateTime := "2024-08-30 18:18:18"
+	srcDate := "2024-08-30"
+
+	strMinDate := "2024-08-30 00:00:00"
+	strMaxDate := "2024-08-30 23:59:59"
+
+	DateNum := 20240830
+
+	paramDate := NewBeijingParamDateTime(srcDate)
+	paramDateTime := NewBeijingParamDateTime(srcDateTime)
+
+	if !paramDate.IsDate() {
+		t.Errorf("不是日期类型：%d want %d", paramDate.GetDateType(), PARAM_TYPE_DATE)
+	}
+	if !paramDateTime.IsDateTime() {
+		t.Errorf("不是日期时间类型：%d want %d", paramDateTime.GetDateType(), PARAM_TYPE_DATETIME)
+	}
+
+	if paramDate.GetDateString() != srcDate {
+		t.Errorf("日期类型：%s want %s", paramDate.GetDateString(), srcDate)
+	}
+	if paramDateTime.GetDateTimeString() != srcDateTime {
+		t.Errorf("日期时间类型：%s want %s", paramDateTime.GetDateTimeString(), srcDateTime)
+	}
+
+	if paramDate.MinDateTimeString() != strMinDate {
+		t.Errorf("最小日期时间：%s want %s", paramDate.MinDateTimeString(), strMinDate)
+	}
+	if paramDate.MaxDateTimeString() != strMaxDate {
+		t.Errorf("最大日期时间：%s want %s", paramDate.MaxDateTimeString(), strMaxDate)
+	}
+
+	if paramDateTime.MinDateTimeString() != strMinDate {
+		t.Errorf("最小日期时间：%s want %s", paramDateTime.MinDateTimeString(), strMinDate)
+	}
+	if paramDateTime.MaxDateTimeString() != strMaxDate {
+		t.Errorf("最大日期时间：%s want %s", paramDateTime.MaxDateTimeString(), strMaxDate)
+	}
+
+	if paramDate.DateNum() != DateNum {
+		t.Errorf("日期类型：%d want %d", paramDate.DateNum(), DateNum)
+	}
+	if paramDateTime.DateNum() != DateNum {
+		t.Errorf("日期时间类型：%d want %d", paramDateTime.DateNum(), DateNum)
+	}
+}
