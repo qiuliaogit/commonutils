@@ -74,9 +74,17 @@ func (p *PageInfo) CalcPageOffset() int {
 	return (p.Page - 1) * p.PageSize
 }
 
+func (p *PageInfo) Offset() int {
+	return p.CalcPageOffset()
+}
+
 // CalcLimit 用于mysql的计算limit
 func (p *PageInfo) CalcLimit() int {
 	return p.PageSize
+}
+
+func (p *PageInfo) Limit() int {
+	return p.CalcLimit()
 }
 
 // CalcMaxPage 根据记录数和页的大小 计算最大页数 paramPageSize <= 0时 计算失败

@@ -22,7 +22,8 @@ go get github.com/qiuliaogit/commonutils
 - tdatetime.go 一个时间日期TDateTime的类
 
 ## 更新日志
-### 1.0.12
+### 1.0.13
+- page增加Offset和Limit方法(简化)
 - 增加是否是错误的类型判断
 - 增加ParamDateTime是否为空字符的函数
 - 增加NewGormWhere函数，用于简化Gorm的条件查询
