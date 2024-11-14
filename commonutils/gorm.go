@@ -10,12 +10,12 @@ type whereItem struct {
 
 // Gorm的Where类
 type GormWhere struct {
-	items []whereItem
+	items []*whereItem
 }
 
 // 添加条件
 func (w *GormWhere) Add(cond string, value ...interface{}) {
-	w.items = append(w.items, whereItem{Cond: cond, Value: value})
+	w.items = append(w.items, &whereItem{Cond: cond, Value: value})
 }
 
 // 条件数量
@@ -74,4 +74,9 @@ func (w *GormWhere) WhereValues() []interface{} {
 		values = append(values, item.Value...)
 	}
 	return values
+}
+
+// 创建一个新的GormWhere对象
+func NewGormWhere(cap int) *GormWhere {
+	return &GormWhere{items: make([]*whereItem, 0, cap)}
 }

@@ -22,6 +22,8 @@ go get github.com/qiuliaogit/commonutils
 - tdatetime.go 一个时间日期TDateTime的类
 
 ## 更新日志
+### 1.0.10
+- 增加NewGormWhere函数，用于简化Gorm的条件查询
 ### 1.0.9
 - 增加GormWhere类，用于简化Gorm的条件查询
 - 增加ParamDateTime类，用于处理日期参数
