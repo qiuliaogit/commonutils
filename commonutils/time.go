@@ -297,6 +297,11 @@ func (p *ParamDateTime) IsDate() bool {
 	return p.dateType == PARAM_TYPE_DATE
 }
 
+// 是否是错误的
+func (p *ParamDateTime) IsError() bool {
+	return p.dateType == PARAM_TYPE_ERROR
+}
+
 // 是否是时间
 func (p *ParamDateTime) IsDateTime() bool {
 	return p.dateType == PARAM_TYPE_DATETIME

@@ -22,9 +22,9 @@ go get github.com/qiuliaogit/commonutils
 - tdatetime.go 一个时间日期TDateTime的类
 
 ## 更新日志
-### 1.0.11
+### 1.0.12
+- 增加是否是错误的类型判断
 - 增加ParamDateTime是否为空字符的函数
-### 1.0.10
 - 增加NewGormWhere函数，用于简化Gorm的条件查询
 ### 1.0.9
 - 增加GormWhere类，用于简化Gorm的条件查询
