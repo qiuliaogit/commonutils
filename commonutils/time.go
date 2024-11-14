@@ -287,6 +287,11 @@ func (p *ParamDateTime) GetDateType() int {
 	return p.dateType
 }
 
+// 参数是不是空字符串
+func (p *ParamDateTime) IsEmpty() bool {
+	return p.param == ""
+}
+
 // 是否是日期
 func (p *ParamDateTime) IsDate() bool {
 	return p.dateType == PARAM_TYPE_DATE
@@ -365,9 +370,11 @@ func (p *ParamDateTime) GetMillis() int64 {
 func NewParamDateTime(param string, local *time.Location) *ParamDateTime {
 	p := &ParamDateTime{
 		dateType: PARAM_TYPE_ERROR,
-		param:    param,
+		param:    Trim(param),
 	}
-
+	if p.IsEmpty() {
+		return p
+	}
 	if local == nil {
 		local = time.Local
 	}
@@ -395,7 +402,10 @@ func NewParamDateTime(param string, local *time.Location) *ParamDateTime {
 func NewBeijingParamDateTime(param string) *ParamDateTime {
 	p := &ParamDateTime{
 		dateType: PARAM_TYPE_ERROR,
-		param:    param,
+		param:    Trim(param),
+	}
+	if p.IsEmpty() {
+		return p
 	}
 	if IsDateFormat(param) {
 		p.dateType = PARAM_TYPE_DATE
