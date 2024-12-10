@@ -221,3 +221,29 @@ func Test_ParamDateTime(t *testing.T) {
 		t.Errorf("日期时间类型：%d want %d", paramDateTime.DateNum(), DateNum)
 	}
 }
+
+func Test_TimeZoneTest(t *testing.T) {
+	t1 := "2024-08-11 18:18:18"
+	t2 := "2024-08-30 09:28:38"
+	t3 := "2024-09-30 18:18:18"
+
+	tt1, _ := ParseDateTimeForBeijingSecond(t1)
+	tt2, _ := ParseDateTimeForBeijingSecond(t2)
+	tt3, _ := ParseDateTimeForBeijingSecond(t3)
+
+	t.Logf("北京时间：%s 的时间戳：%d", t1, tt1)
+	t.Logf("北京时间：%s 的时间戳：%d", t2, tt2)
+	t.Logf("北京时间：%s 的时间戳：%d", t3, tt3)
+
+	dbt1, _ := GetMidnightTimestamp(tt1, 4)
+	dbt2, _ := GetMidnightTimestamp(tt2, 4)
+	dbt3, _ := GetMidnightTimestamp(tt3, 4)
+
+	dbtime1, _ := ConvertTimestampToTime(dbt1, 4)
+	dbtime2, _ := ConvertTimestampToTime(dbt2, 4)
+	dbtime3, _ := ConvertTimestampToTime(dbt3, 4)
+
+	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t1, dbt1, dbtime1.Format("2006-01-02 15:04:05"))
+	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t2, dbt2, dbtime2.Format("2006-01-02 15:04:05"))
+	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t3, dbt3, dbtime3.Format("2006-01-02 15:04:05"))
+}

@@ -50,6 +50,8 @@ const (
 var (
 	dateRegex     = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
 	dateTimeRegex = regexp.MustCompile(`^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$`)
+
+	ErrTimeZoneOutOfRange = errors.New("zone offset out of range, must be between -12 and +12") //  时区偏移超出范围，必须在 -12 到 +12 之间")
 )
 
 // 时区定义参考： https://jp.cybozu.help/general/zh/admin/list_systemadmin/list_localization/timezone.html
@@ -430,4 +432,98 @@ func NewBeijingParamDateTime(param string) *ParamDateTime {
 		}
 	}
 	return p
+}
+
+// 获取指定时区的 0 点时间戳（时区偏移为 -12 到 +12 的整数）
+//   - timestamp: 时间戳 单位：秒
+//   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
+//
+// 返回值：指定时区的 0 点时间戳 单位：秒
+func GetMidnightTimestamp(timestamp int64, timezoneOffset int) (int64, error) {
+	// 检查时区偏移范围
+	if timezoneOffset < -12 || timezoneOffset > 12 {
+		return 0, ErrTimeZoneOutOfRange
+	}
+
+	// 将时间戳转换为 UTC 时间
+	t := time.Unix(timestamp, 0).UTC()
+
+	// 创建自定义时区
+	location := time.FixedZone("Custom", timezoneOffset*3600)
+
+	// 转换为该时区时间
+	localTime := t.In(location)
+
+	// 构造当天的 0 点时间
+	midnight := time.Date(localTime.Year(), localTime.Month(), localTime.Day(), 0, 0, 0, 0, location)
+
+	return midnight.Unix(), nil
+}
+
+// 获取指定时区的 0 点时间戳（时区偏移为 -12 到 +12 的整数）
+//   - paramTime: 指定的时间
+//   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
+//
+// 返回值：指定时区的 0 点时间戳 单位：秒
+func GetMidnightTime(paramTime time.Time, timezoneOffset int) (int64, error) {
+	// 检查时区偏移范围
+	if timezoneOffset < -12 || timezoneOffset > 12 {
+		return 0, ErrTimeZoneOutOfRange
+	}
+
+	// 将时间戳转换为 UTC 时间
+	t := paramTime.UTC()
+
+	// 创建自定义时区
+	location := time.FixedZone("Custom", timezoneOffset*3600)
+
+	// 转换为该时区时间
+	localTime := t.In(location)
+
+	// 构造当天的 0 点时间
+	midnight := time.Date(localTime.Year(), localTime.Month(), localTime.Day(), 0, 0, 0, 0, location)
+
+	return midnight.Unix(), nil
+}
+
+// 将指定时间转换为目标时区的时间
+//   - paramTime: 指定的时间
+//   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
+//
+// 返回值：目标时区的时间
+func ConvertTimeToTime(t time.Time, timezoneOffset int) (time.Time, error) {
+	// 检查时区范围
+	if timezoneOffset < -12 || timezoneOffset > 12 {
+		return time.Time{}, ErrTimeZoneOutOfRange
+	}
+
+	// 创建自定义时区
+	location := time.FixedZone("Custom", timezoneOffset*3600)
+
+	// 转换为目标时区
+	localTime := t.In(location)
+	return localTime, nil
+}
+
+// 将时间戳转换为指定时区的时间
+//   - timestamp: 时间戳 单位：秒
+//   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
+//
+// 返回值：指定时区的时间
+func ConvertTimestampToTime(timestamp int64, timezoneOffset int) (time.Time, error) {
+	// 检查时区范围
+	if timezoneOffset < -12 || timezoneOffset > 12 {
+		return time.Time{}, ErrTimeZoneOutOfRange
+	}
+
+	// 将时间戳转换为 UTC 时间
+	utcTime := time.Unix(timestamp, 0).UTC()
+
+	// 创建自定义时区（偏移量以秒为单位）
+	location := time.FixedZone("Custom", timezoneOffset*3600)
+
+	// 转换为该时区时间
+	localTime := utcTime.In(location)
+
+	return localTime, nil
 }

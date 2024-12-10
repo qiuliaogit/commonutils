@@ -22,6 +22,10 @@ go get github.com/qiuliaogit/commonutils
 - tdatetime.go 一个时间日期TDateTime的类
 
 ## 更新日志
+### 1.0.14
+- 增加HasWhitespace和RemoveAllWhiteSpace函数
+- 增加获取指定时区0点时间戳函数 GetMidnightTimestamp，GetMidnightTime
+- 增加转为指定时区的时间函数 ConvertTimeToTime，ConvertTimestampToTime
 ### 1.0.13
 - page增加Offset和Limit方法(简化)
 - 增加是否是错误的类型判断
