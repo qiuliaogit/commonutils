@@ -502,7 +502,7 @@ func ConvertTimeToTime(t time.Time, timezoneOffset int) (time.Time, error) {
 	}
 
 	// 创建自定义时区
-	location := time.FixedZone("Custom", timezoneOffset*3600)
+	location := time.FixedZone("Custom", timezoneOffset*SECOND_BY_HOUR)
 
 	// 转换为目标时区
 	localTime := t.In(location)
@@ -515,19 +515,5 @@ func ConvertTimeToTime(t time.Time, timezoneOffset int) (time.Time, error) {
 //
 // 返回值：指定时区的时间
 func ConvertTimestampToTime(timestamp int64, timezoneOffset int) (time.Time, error) {
-	// 检查时区范围
-	if timezoneOffset < -12 || timezoneOffset > 12 {
-		return time.Time{}, ErrTimeZoneOutOfRange
-	}
-
-	// 将时间戳转换为 UTC 时间
-	utcTime := time.Unix(timestamp, 0).UTC()
-
-	// 创建自定义时区（偏移量以秒为单位）
-	location := time.FixedZone("Custom", timezoneOffset*3600)
-
-	// 转换为该时区时间
-	localTime := utcTime.In(location)
-
-	return localTime, nil
+	return ConvertTimeToTime(time.Unix(timestamp, 0), timezoneOffset)
 }
