@@ -38,6 +38,8 @@ const (
 	DT_TYPE_BEIJING = 8
 	// 北京时区名称
 	ZONE_NAME_BEGIJING = "Asia/Shanghai"
+	// 北京时区偏移量
+	TIME_ZONE_BEIJING = 8
 
 	// 参数类型 日期 YYYY-MM-DD
 	PARAM_TYPE_DATE = 1
@@ -440,23 +442,32 @@ func NewBeijingParamDateTime(param string) *ParamDateTime {
 //
 // 返回值：指定时区的 0 点时间戳 单位：秒
 func GetMidnightTimestamp(timestamp int64, timezoneOffset int) (int64, error) {
-	// 检查时区偏移范围
-	if timezoneOffset < -12 || timezoneOffset > 12 {
-		return 0, ErrTimeZoneOutOfRange
+	midnight, err := GetMidnightTimeToTime(time.Unix(timestamp, 0), timezoneOffset)
+	if err != nil {
+		return 0, err
 	}
+	return midnight.Unix(), nil
+}
 
-	// 将时间戳转换为 UTC 时间
-	t := time.Unix(timestamp, 0).UTC()
+// 获取指定时区的 0 点时间戳（时区偏移为 -12 到 +12 的整数）
+//   - timestamp: 时间戳 单位：秒
+//   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
+//
+// 返回值：指定时区的 0 点时间
+func GetMidnightTimestampToTime(timestamp int64, timezoneOffset int) (time.Time, error) {
+	return GetMidnightTimeToTime(time.Unix(timestamp, 0), timezoneOffset)
+}
 
-	// 创建自定义时区
-	location := time.FixedZone("Custom", timezoneOffset*3600)
-
-	// 转换为该时区时间
-	localTime := t.In(location)
-
-	// 构造当天的 0 点时间
-	midnight := time.Date(localTime.Year(), localTime.Month(), localTime.Day(), 0, 0, 0, 0, location)
-
+// 获取指定时区的 0 点时间戳（时区偏移为 -12 到 +12 的整数）
+//   - paramTime: 指定的时间
+//   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
+//
+// 返回值：指定时区的 0 点时间 单位：秒
+func GetMidnightTime(paramTime time.Time, timezoneOffset int) (int64, error) {
+	midnight, err := GetMidnightTimeToTime(paramTime, timezoneOffset)
+	if err != nil {
+		return 0, err
+	}
 	return midnight.Unix(), nil
 }
 
@@ -464,26 +475,19 @@ func GetMidnightTimestamp(timestamp int64, timezoneOffset int) (int64, error) {
 //   - paramTime: 指定的时间
 //   - timezoneOffset: 时区偏移 单位：小时 （时区偏移为 -12 到 +12 的整数）
 //
-// 返回值：指定时区的 0 点时间戳 单位：秒
-func GetMidnightTime(paramTime time.Time, timezoneOffset int) (int64, error) {
+// 返回值：指定时区的 0 点时间
+func GetMidnightTimeToTime(paramTime time.Time, timezoneOffset int) (time.Time, error) {
 	// 检查时区偏移范围
 	if timezoneOffset < -12 || timezoneOffset > 12 {
-		return 0, ErrTimeZoneOutOfRange
+		var midnight time.Time
+		return midnight, ErrTimeZoneOutOfRange
 	}
-
-	// 将时间戳转换为 UTC 时间
-	t := paramTime.UTC()
-
 	// 创建自定义时区
-	location := time.FixedZone("Custom", timezoneOffset*3600)
-
+	location := time.FixedZone("Custom", timezoneOffset*SECOND_BY_HOUR)
 	// 转换为该时区时间
-	localTime := t.In(location)
-
+	localTime := paramTime.In(location)
 	// 构造当天的 0 点时间
-	midnight := time.Date(localTime.Year(), localTime.Month(), localTime.Day(), 0, 0, 0, 0, location)
-
-	return midnight.Unix(), nil
+	return time.Date(localTime.Year(), localTime.Month(), localTime.Day(), 0, 0, 0, 0, location), nil
 }
 
 // 将指定时间转换为目标时区的时间

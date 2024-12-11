@@ -22,15 +22,27 @@ go get github.com/qiuliaogit/commonutils
 - tdatetime.go 一个时间日期TDateTime的类
 
 ## 更新日志
+
+### 1.0.15
+
+- 增加GetMidnightTimeToTime和GetMidnightTimestampToTime函数
+- 重构GetMidnightTimestamp，GetMidnightTime实现
+- 增加北京时区常量TIME_ZONE_BEIJING
+
 ### 1.0.14
+
 - 增加HasWhitespace和RemoveAllWhiteSpace函数
-- 增加获取指定时区0点时间戳函数 GetMidnightTimestamp，GetMidnightTime
+- 增加获取指定时区0点时间戳函数 GetMidnightTimestamp，GetMidnightTime， GetMidnightTimeToTime
 - 增加转为指定时区的时间函数 ConvertTimeToTime，ConvertTimestampToTime
+
 ### 1.0.13
+
 - page增加Offset和Limit方法(简化)
 - 增加是否是错误的类型判断
 - 增加ParamDateTime是否为空字符的函数
 - 增加NewGormWhere函数，用于简化Gorm的条件查询
+
 ### 1.0.9
+
 - 增加GormWhere类，用于简化Gorm的条件查询
 - 增加ParamDateTime类，用于处理日期参数

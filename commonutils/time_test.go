@@ -243,7 +243,23 @@ func Test_TimeZoneTest(t *testing.T) {
 	dbtime2, _ := ConvertTimestampToTime(dbt2, 4)
 	dbtime3, _ := ConvertTimestampToTime(dbt3, 4)
 
-	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t1, dbt1, dbtime1.Format("2006-01-02 15:04:05"))
+	location := time.FixedZone("Custom", 10*3600)
+	t4 := dbtime1.In(location)
+	location1 := time.FixedZone("Custom", 0*3600)
+	t5 := dbtime1.In(location1)
+
+	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s  *** %s", t1, dbt1, dbtime1.Format("2006-01-02 15:04:05"), t4.Format("2006-01-02 15:04:05"))
 	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t2, dbt2, dbtime2.Format("2006-01-02 15:04:05"))
 	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t3, dbt3, dbtime3.Format("2006-01-02 15:04:05"))
+
+	t.Logf("%s, %s, %s", dbtime1.Format("2006-01-02 15:04:05"), t4.Format("2006-01-02 15:04:05"), t5.Format("2006-01-02 15:04:05"))
+
+	// 	// 将时间戳转换为 UTC 时间
+	// t := paramTime.UTC()
+
+	// // 创建自定义时区
+	// location := time.FixedZone("Custom", timezoneOffset*3600)
+
+	// // 转换为该时区时间
+	// localTime := t.In(location)
 }
