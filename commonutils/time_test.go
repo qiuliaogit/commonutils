@@ -231,28 +231,59 @@ func Test_TimeZoneTest(t *testing.T) {
 	tt2, _ := ParseDateTimeForBeijingSecond(t2)
 	tt3, _ := ParseDateTimeForBeijingSecond(t3)
 
-	t.Logf("北京时间：%s 的时间戳：%d", t1, tt1)
-	t.Logf("北京时间：%s 的时间戳：%d", t2, tt2)
-	t.Logf("北京时间：%s 的时间戳：%d", t3, tt3)
+	if tt1 != 1723371498 {
+		t.Errorf("北京时间：%s 的时间戳不是%d (秒)", t1, 1723371498)
+	}
+	if tt2 != 1724981318 {
+		t.Errorf("北京时间：%s 的时间戳不是%d (秒)", t2, 1724981318)
+	}
+
+	if tt3 != 1727691498 {
+		t.Errorf("北京时间：%s 的时间戳不是%d (秒)", t3, 1727691498)
+	}
+
+	// t.Logf("北京时间：%s 的时间戳：%d", t1, tt1)
+	// t.Logf("北京时间：%s 的时间戳：%d", t2, tt2)
+	// t.Logf("北京时间：%s 的时间戳：%d", t3, tt3)
 
 	dbt1, _ := GetMidnightTimestamp(tt1, 4)
 	dbt2, _ := GetMidnightTimestamp(tt2, 4)
 	dbt3, _ := GetMidnightTimestamp(tt3, 4)
 
+	if dbt1 != 1723320000 {
+		t.Errorf("北京时间：%s 对应的迪拜0点时间戳不是%d (秒)", t3, 1723320000)
+	}
+	if dbt2 != 1724961600 {
+		t.Errorf("北京时间：%s 对应的迪拜0点时间戳不是%d (秒)", t3, 1724961600)
+	}
+	if dbt3 != 1727640000 {
+		t.Errorf("北京时间：%s 对应的迪拜0点时间戳不是%d (秒)", t3, 1727640000)
+	}
+
 	dbtime1, _ := ConvertTimestampToTime(dbt1, 4)
 	dbtime2, _ := ConvertTimestampToTime(dbt2, 4)
 	dbtime3, _ := ConvertTimestampToTime(dbt3, 4)
 
-	location := time.FixedZone("Custom", 10*3600)
-	t4 := dbtime1.In(location)
-	location1 := time.FixedZone("Custom", 0*3600)
-	t5 := dbtime1.In(location1)
+	if dbtime1.Format("2006-01-02 15:04:05") != "2024-08-11 00:00:00" {
+		t.Errorf("北京时间：%s => %s 对应的迪拜0点时间不是%s", t1, dbtime1.Format("2006-01-02 15:04:05"), "2024-08-11 00:00:00")
+	}
+	if dbtime2.Format("2006-01-02 15:04:05") != "2024-08-30 00:00:00" {
+		t.Errorf("北京时间：%s => %s 对应的迪拜0点时间不是%s", t2, dbtime2.Format("2006-01-02 15:04:05"), "2024-08-30 00:00:00")
+	}
+	if dbtime3.Format("2006-01-02 15:04:05") != "2024-09-30 00:00:00" {
+		t.Errorf("北京时间：%s => %s 对应的迪拜0点时间不是%s", t3, dbtime3.Format("2006-01-02 15:04:05"), "2024-09-30 00:00:00")
+	}
 
-	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s  *** %s", t1, dbt1, dbtime1.Format("2006-01-02 15:04:05"), t4.Format("2006-01-02 15:04:05"))
-	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t2, dbt2, dbtime2.Format("2006-01-02 15:04:05"))
-	t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t3, dbt3, dbtime3.Format("2006-01-02 15:04:05"))
+	// location := time.FixedZone("Custom", 10*3600)
+	// t4 := dbtime1.In(location)
+	// location1 := time.FixedZone("Custom", 0*3600)
+	// t5 := dbtime1.In(location1)
 
-	t.Logf("%s, %s, %s", dbtime1.Format("2006-01-02 15:04:05"), t4.Format("2006-01-02 15:04:05"), t5.Format("2006-01-02 15:04:05"))
+	// t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s  *** %s", t1, dbt1, dbtime1.Format("2006-01-02 15:04:05"), t4.Format("2006-01-02 15:04:05"))
+	// t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t2, dbt2, dbtime2.Format("2006-01-02 15:04:05"))
+	// t.Logf("迪拜时间：%s 的当天凌晨时间戳：%d => %s", t3, dbt3, dbtime3.Format("2006-01-02 15:04:05"))
+
+	// t.Logf("%s, %s, %s", dbtime1.Format("2006-01-02 15:04:05"), t4.Format("2006-01-02 15:04:05"), t5.Format("2006-01-02 15:04:05"))
 
 	// 	// 将时间戳转换为 UTC 时间
 	// t := paramTime.UTC()
