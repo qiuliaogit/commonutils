@@ -1,10 +1,14 @@
 # commonutils
+
 ## 使用办法
+
 ```bash
 # https://github.com/qiuliaogit/commonutils.git
 go get github.com/qiuliaogit/commonutils
 ```
+
 ## 主要内容
+
 - int.go 定义泛型的整数类型和字符串转整数的函数和随机范围的函数
 - isin.go 判断指定元素是否再数组中的函数
 - page.go mysql用于分页的类
