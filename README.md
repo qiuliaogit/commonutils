@@ -27,6 +27,10 @@ go get github.com/qiuliaogit/commonutils
 
 ## 更新日志
 
+### 1.0.16
+
+- 增加一组，指定时区的日期时间相关函数
+
 ### 1.0.15
 
 - 增加GetMidnightTimeToTime和GetMidnightTimestampToTime函数

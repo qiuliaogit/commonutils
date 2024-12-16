@@ -98,16 +98,43 @@ func ParseDateTimeForBeijingMillis(paramDate string) (int64, error) {
 	return startTime.UnixMilli(), nil
 }
 
+// ParseDateTimeForZone 解析指定时区的日期时间
+//   - paramDateString 日期时间字符串 格式：2021-01-01 15:4:5
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+//   - 返回：时间戳 单位毫秒
+func ParseDateTimeForZoneMillis(paramDateString string, paramZoneForSeconds int) (int64, error) {
+	loc := time.FixedZone("Custom", paramZoneForSeconds)
+	startTime, err := time.ParseInLocation("2006-1-2 15:4:5", paramDateString, loc)
+	if err != nil {
+		return 0, err
+	}
+	return startTime.UnixMilli(), nil
+}
+
 // ParseDateTimeForBeijingTime 解析北京格式的日期时间
 //   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
-func ParseDateTimeForBeijingTime(paramDate string) (time.Time, error) {
-	return time.ParseInLocation("2006-1-2 15:4:5", paramDate, beijingLoc)
+func ParseDateTimeForBeijingTime(paramDateTime string) (time.Time, error) {
+	return time.ParseInLocation("2006-1-2 15:4:5", paramDateTime, beijingLoc)
+}
+
+// ParseDateTimeForZoneTime 解析指定时区日期时间格式的日期时间
+//   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
+func ParseDateTimeForZoneTime(paramDateTime string, paramZoneForSeconds int) (time.Time, error) {
+	loc := time.FixedZone("Custom", paramZoneForSeconds)
+	return time.ParseInLocation("2006-1-2 15:4:5", paramDateTime, loc)
 }
 
 // ParseDateForBeijingTime 解析北京格式的日期时间
 //   - paramDate 日期时间字符串 格式：2021-01-01
 func ParseDateForBeijingTime(paramDate string) (time.Time, error) {
 	return time.ParseInLocation("2006-1-2", paramDate, beijingLoc)
+}
+
+// ParseDateForZoneTime 解析指定时区格式的日期时间
+//   - paramDate 日期时间字符串 格式：2021-01-01
+func ParseDateForZoneTime(paramDate string, paramZoneForSeconds int) (time.Time, error) {
+	loc := time.FixedZone("Custom", paramZoneForSeconds)
+	return time.ParseInLocation("2006-1-2", paramDate, loc)
 }
 
 // ParseDateForBeijingMillis 解析北京格式的日期 单位毫秒
@@ -120,10 +147,33 @@ func ParseDateForBeijingMillis(paramDate string) (int64, error) {
 	return startTime.UnixMilli(), nil
 }
 
+// ParseDateForZoneMillis 解析指定时区的日期 单位毫秒
+//   - paramDate 日期字符串 格式：2021-01-01
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ParseDateForZoneMillis(paramDate string, paramZoneForSeconds int) (int64, error) {
+	loc := time.FixedZone("Custom", paramZoneForSeconds)
+	startTime, err := time.ParseInLocation("2006-1-2", paramDate, loc)
+	if err != nil {
+		return 0, err
+	}
+	return startTime.UnixMilli(), nil
+}
+
 // ParseDateTimeForBeijingSecond 解析北京格式的日期 单位秒
 //   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
+//   - 返回：时间戳 单位秒
 func ParseDateTimeForBeijingSecond(paramDate string) (int64, error) {
 	stNow, err := ParseDateTimeForBeijingMillis(paramDate)
+	stNow /= MILLIS_BY_SECOND // (stNow - stNow%MILLIS_BY_SECOND) / MILLIS_BY_SECOND
+	return stNow, err
+}
+
+// ParseDateTimeForBeijingSecond 解析北京格式的日期 单位秒
+//   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+//   - 返回：时间戳 单位秒
+func ParseDateTimeForZoneSecond(paramDate string, paramZoneForSeconds int) (int64, error) {
+	stNow, err := ParseDateTimeForZoneMillis(paramDate, paramZoneForSeconds)
 	stNow /= MILLIS_BY_SECOND // (stNow - stNow%MILLIS_BY_SECOND) / MILLIS_BY_SECOND
 	return stNow, err
 }
@@ -132,6 +182,16 @@ func ParseDateTimeForBeijingSecond(paramDate string) (int64, error) {
 //   - paramDate 日期字符串 格式：2021-01-01
 func ParseDateForBeijingSecond(paramDate string) (int64, error) {
 	stNow, err := ParseDateForBeijingMillis(paramDate)
+	stNow /= MILLIS_BY_SECOND // (stNow - stNow%MILLIS_BY_SECOND) / MILLIS_BY_SECOND
+	return stNow, err
+}
+
+// ParseDateForZoneSecond 解析指定时区的日期 单位秒
+//   - paramDate 日期时间字符串 格式：2021-01-01 15:4:5
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+//   - 返回：时间戳 单位秒
+func ParseDateForZoneSecond(paramDate string, paramZoneForSeconds int) (int64, error) {
+	stNow, err := ParseDateForZoneMillis(paramDate, paramZoneForSeconds)
 	stNow /= MILLIS_BY_SECOND // (stNow - stNow%MILLIS_BY_SECOND) / MILLIS_BY_SECOND
 	return stNow, err
 }
@@ -165,11 +225,28 @@ func BeijingFormat(paramDateTime time.Time, paramFormat string) string {
 	return paramDateTime.In(beijingLoc).Format(paramFormat)
 }
 
+// ZoneFormat 将时间转换为指定时区的格式字符串
+//   - paramDateTime 时间
+//   - paramFormat 格式化字符串 例如："2006-01-02 15:04:05"
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+//   - return 指定时区的格式化字符串
+func ZoneFormat(paramDateTime time.Time, paramFormat string, paramZoneForSeconds int) string {
+	loc := time.FixedZone("Custom", paramZoneForSeconds)
+	return paramDateTime.In(loc).Format(paramFormat)
+}
+
 // BeijingDateString 将时间转换为北京时区的日期字符串 YYYY-MM-DD
 //   - paramDateTime 时间
 //   - return 北京时区的日期字符串 格式：2021-01-01
 func BeijingDateString(paramDateTime time.Time) string {
 	return BeijingFormat(paramDateTime, "2006-01-02")
+}
+
+// ZoneDateString 将时间转换为指定时区的日期字符串 YYYY-MM-DD
+//   - paramDateTime 时间
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ZoneDateString(paramDateTime time.Time, paramZoneForSeconds int) string {
+	return ZoneFormat(paramDateTime, "2006-01-02", paramZoneForSeconds)
 }
 
 // BeijingDateTimeString 将时间转换为北京时区的日期时间字符串 YYYY-MM-DD hh:mm:ss
@@ -179,11 +256,25 @@ func BeijingDateTimeString(paramDateTime time.Time) string {
 	return BeijingFormat(paramDateTime, "2006-01-02 15:04:05")
 }
 
+// ZoneDateTimeString 将时间转换为指定时区的日期时间字符串 YYYY-MM-DD hh:mm:ss
+//   - paramDateTime 时间
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ZoneDateTimeString(paramDateTime time.Time, paramZoneForSeconds int) string {
+	return ZoneFormat(paramDateTime, "2006-01-02 15:04:05", paramZoneForSeconds)
+}
+
 // BeijingTimeString 将时间转换为北京时区的时间字符串 hh:mm:ss
 //   - paramDateTime 时间
 //   - return 北京时区的时间字符串 格式：15:04:05
 func BeijingTimeString(paramDateTime time.Time) string {
 	return BeijingFormat(paramDateTime, "15:04:05")
+}
+
+// ZoneTimeString 将时间转换为指定时区的时间字符串 hh:mm:ss
+//   - paramDateTime 时间
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ZoneTimeString(paramDateTime time.Time, paramZoneForSeconds int) string {
+	return ZoneFormat(paramDateTime, "15:04:05", paramZoneForSeconds)
 }
 
 // BeijingCompactDateString 将时间转换为北京时区的日期字符串(压缩版)
@@ -193,6 +284,13 @@ func BeijingCompactDateString(paramDateTime time.Time) string {
 	return BeijingFormat(paramDateTime, "20060102")
 }
 
+// ZoneCompactDateString 将时间转换为指定时区的日期字符串(压缩版)
+//   - paramDateTime 时间
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ZoneCompactDateString(paramDateTime time.Time, paramZoneForSeconds int) string {
+	return ZoneFormat(paramDateTime, "20060102", paramZoneForSeconds)
+}
+
 // BeijingCompactDateTimeString 将时间转换为北京时区的日期时间字符串(压缩版)
 //   - paramDateTime 时间
 //   - return 北京时区的日期时间字符串(压缩版) 格式：20210101150405
@@ -200,11 +298,25 @@ func BeijingCompactDateTimeString(paramDateTime time.Time) string {
 	return BeijingFormat(paramDateTime, "20060102150405")
 }
 
+// ZoneCompactDateTimeString 将时间转换为指定时区的日期时间字符串(压缩版)
+//   - paramDateTime 时间
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ZoneCompactDateTimeString(paramDateTime time.Time, paramZoneForSeconds int) string {
+	return ZoneFormat(paramDateTime, "20060102150405", paramZoneForSeconds)
+}
+
 // BeijingCompactTimeString 将时间转换为北京时区的时间字符串(压缩版)
 //   - paramDateTime 时间
 //   - return 北京时区的时间字符串(压缩版) 格式：150405
 func BeijingCompactTimeString(paramDateTime time.Time) string {
 	return BeijingFormat(paramDateTime, "150405")
+}
+
+// ZoneCompactTimeString 将时间转换为指定时区的时间字符串(压缩版)
+//   - paramDateTime 时间
+//   - paramZone 时区偏移量 单位秒 (seconds east of UTC).  取值访问 +-(12 * 3600)
+func ZoneCompactTimeString(paramDateTime time.Time, paramZoneForSeconds int) string {
+	return ZoneFormat(paramDateTime, "150405", paramZoneForSeconds)
 }
 
 // GetTimeOperationDayString 获取指定时间根据天数计算后得到的时间 YYYYMMDD格式字符串
