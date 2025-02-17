@@ -27,6 +27,19 @@ go get github.com/qiuliaogit/commonutils
 
 ## 更新日志
 
+### 1.0.18
+
+- 增加一组 http 请求相关函数
+  - StructToQueryParams 将带有json标记的结构体转换为url.Values
+  - PostRequestByOrigin 原始的POST 请求，上传 JSON 数据并返回 JSON 响应
+  - GetRequestByOrigin 原始的Get 请求，返回 JSON 响应
+  - PostRequestBy2Map 发起一个 POST 请求，上传 JSON 数据并返回 JSON 响应
+  - PostRequestBy2Struct 发起一个 POST 请求，上传 JSON 数据并返回 JSON 响应
+  - GetRequestByMap2Map 发起一个 GET 请求，URL 上行数据是查询参数，返回 JSON 响应
+  - GetRequestByMap2Struct 发起一个 GET 请求，URL 上行数据是查询参数，返回 JSON 响应
+  - GetRequestByStruct2Map 发起一个 GET 请求，URL 上行数据是查询参数，返回 JSON 响应
+  - GetRequestByStruct2Struct 发起一个 GET 请求，URL 上行数据是查询参数，返回 JSON 响应
+
 ### 1.0.16
 
 - 增加一组，指定时区的日期时间相关函数

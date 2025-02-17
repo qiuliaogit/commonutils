@@ -1,7 +1,7 @@
 package commonutils
 
 const (
-	Version = "1.0.16"
+	Version = "1.0.18"
 	Name    = "commonutils"
 )
 
