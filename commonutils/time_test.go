@@ -146,6 +146,11 @@ func Test_Timestamp2Beijing(t *testing.T) {
 func Test_ParseDateTime(t *testing.T) {
 	srcDateTime := "2024-08-30 18:18:18"
 	srcDate := "2024-08-30"
+	srcTime := "18:18:18"
+
+	srcErrDateTime := "2024-08-30 28:18:18"
+	srcErrDate := "2024-08-32"
+	srcErrTime := "24:18:18"
 
 	dt, err := ParseDateTimeForBeijingTime(srcDateTime)
 	if err != nil {
@@ -172,6 +177,23 @@ func Test_ParseDateTime(t *testing.T) {
 	if !IsDateFormat(srcDate) {
 		t.Errorf("(%s) => Date Format Error", srcDate)
 	}
+
+	if !IsTimeFormat(srcTime) {
+		t.Errorf("(%s) => Time Format Error", srcTime)
+	}
+
+	if IsDateTimeFormat(srcErrDateTime) {
+		t.Errorf("(%s) => DateTime Format Error, but it passed", srcErrDateTime)
+	}
+
+	if IsDateFormat(srcErrDate) {
+		t.Errorf("(%s) => Date Format Error , but it passed", srcErrDate)
+	}
+
+	if IsTimeFormat(srcErrTime) {
+		t.Errorf("(%s) => Time Format Error, but it passed", srcErrTime)
+	}
+
 }
 
 func Test_ParamDateTime(t *testing.T) {

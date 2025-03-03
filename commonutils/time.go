@@ -50,8 +50,11 @@ const (
 )
 
 var (
-	dateRegex     = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
-	dateTimeRegex = regexp.MustCompile(`^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$`)
+	// /** hh:mm:ss的正则表达式 */
+	// baseTime: /^([0-1]\d{1}|2[0-3]):([0-5]\d{1}):([0-5]\d{1})$/,
+	dateRegex     = regexp.MustCompile(`^([1-2]\d{3})[./\-\\\ ](0[1-9]|1[0-2])[./\-\\\ ](0[1-9]|[1-2][0-9]|3[0-1])$`)
+	timeRegex     = regexp.MustCompile(`^([0-1]\d{1}|2[0-3]):([0-5]\d{1}):([0-5]\d{1})$`)
+	dateTimeRegex = regexp.MustCompile(`^[1-2]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$`)
 
 	ErrTimeZoneOutOfRange = errors.New("zone offset out of range, must be between -12 and +12") //  时区偏移超出范围，必须在 -12 到 +12 之间")
 )
@@ -71,6 +74,11 @@ func GetBeijingLocation() *time.Location {
 // IsDateFormat 判断是否是日期格式 YYYY-MM-DD
 func IsDateFormat(paramDate string) bool {
 	return dateRegex.MatchString(paramDate)
+}
+
+// IsTimeFormat 判断是否是时间格式 hh:mm:ss
+func IsTimeFormat(paramTime string) bool {
+	return timeRegex.MatchString(paramTime)
 }
 
 // IsDateTimeFormat 判断是否是日期时间格式 YYYY-MM-DD hh:mm:ss
