@@ -24,8 +24,15 @@ go get github.com/qiuliaogit/commonutils
 - version.go 版本信息
 - datenum.go 一个数字日期的工具函数
 - tdatetime.go 一个时间日期TDateTime的类
+- gorm.go 封装了一些常用的gorm操作函数
+- request.go 封装了一些常用的http请求函数
 
 ## 更新日志
+
+### 1.0.20
+
+- GormWhere AddDateScopeDateTime 增加日期范围条件，被查询的字段是datetime类型
+- 注释增加了查询字段的类型说明
 
 ### 1.0.19
 
