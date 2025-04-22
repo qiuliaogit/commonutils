@@ -29,6 +29,8 @@ go get github.com/qiuliaogit/commonutils
 
 ## 更新日志
 
+### 1.0.23 增加samplecode
+
 ### 1.0.22 增加64位id雪花算法
 
 - 雪花算法实现：
