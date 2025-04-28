@@ -29,6 +29,11 @@ go get github.com/qiuliaogit/commonutils
 
 ## 更新日志
 
+### 1.0.24 修复bug
+
+- 修复Error2Ret的bug
+- 增加NewError和NewErrorf函数
+
 ### 1.0.23 增加samplecode
 
 ### 1.0.22 增加64位id雪花算法
