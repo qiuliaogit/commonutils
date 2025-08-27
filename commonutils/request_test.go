@@ -1,6 +1,9 @@
 package commonutils
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func Test_GetRequest(t *testing.T) {
 	url := "https://api.juejin.cn/user_api/v1/user/profile_id"
