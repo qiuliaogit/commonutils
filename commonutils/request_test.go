@@ -23,7 +23,7 @@ func Test_GetRequest(t *testing.T) {
 		return
 	}
 	t.Log("URL:" + url + "?" + jsonStr.Encode())
-	respBody, err := GetRequestByOrigin(url, nil, jsonStr.Encode())
+	respBody, err := GetRequestByOrigin(url, nil, jsonStr.Encode(), 30*time.Second)
 	if err != nil {
 		t.Error("GetRequestByOrigin error:" + err.Error())
 		return
